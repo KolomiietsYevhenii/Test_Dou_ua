@@ -7,24 +7,26 @@ using NUnit.Framework;
 namespace TestDou.Ua
 {
     [TestFixture]
-    public class Tests
+    public class TestsJobPage
     {
         private readonly IWebDriver _driver;
+        private readonly JobPage _page;
 
-        public Tests()
+        public TestsJobPage()
         
             {
                 _driver = new ChromeDriver();
-            }
+                _page = new JobPage(_driver);
+        }
+        
 
-            [Test]
+        [Test]
             public void CheckingSomeElements()
             {
                 {
-                    var jobPage = new JobPage(_driver);
-                    jobPage.NavigateTo();
+                    _page.NavigateTo();
 
-                    ReadOnlyCollection<IWebElement> informationsElemnents = jobPage.HeaderLiElements;
+                    ReadOnlyCollection<IWebElement> informationsElemnents = _page.HeaderLiElements;
 
                     Assert.AreEqual("Вакансии", informationsElemnents[0].Text);
                     Assert.AreEqual("Тренды", informationsElemnents[1].Text);
@@ -39,12 +41,11 @@ namespace TestDou.Ua
             public void OpenDjinniFooterLinkInNewTab()
             {
                 {
-                    var jobPage = new JobPage(_driver);
-                    jobPage.NavigateTo();
-                    jobPage.NavigateToTab(jobPage.JobsTabElement);
-                    jobPage.NavigateToTab(jobPage.TrendsTabElement);
+                    _page.NavigateTo();
+                    _page.NavigateToTab(_page.JobsTabElement);
+                    _page.NavigateToTab(_page.TrendsTabElement);
 
-                    jobPage.ClickSearchFooterLink();
+                    _page.ClickSearchFooterLink();
 
                     ReadOnlyCollection<string> allTabs = _driver.WindowHandles;
                     string jobPageTab = allTabs[0];
@@ -58,17 +59,16 @@ namespace TestDou.Ua
             public void ReloadJobPageOnBack()
             {
                 {
-                    var jobPage = new JobPage(_driver);
                     var homepage = new HomePage(_driver);
 
                     _driver.MaximizeWindow();
-                    jobPage.NavigateTo();
-                    string initialUsersCount = jobPage.UsersCount;
+                    _page.NavigateTo();
+                    string initialUsersCount = _page.UsersCount;
 
                     homepage.NavigateTo();
                     _driver.Navigate().Back();
 
-                    string reloadedUsers = jobPage.UsersCount;
+                    string reloadedUsers = _page.UsersCount;
                     Assert.Equals(initialUsersCount, reloadedUsers);
                 }
             }
@@ -77,12 +77,11 @@ namespace TestDou.Ua
             public void СheckJobSearchField()
             {
                 {
-                    var jobPage = new JobPage(_driver);
-                    jobPage.NavigateTo();
+                    _page.NavigateTo();
 
-                    jobPage.SelectJobCategory("QA");
-                    jobPage.FillJobSearchField("Luxoft");
-                    jobPage.ClickJobSearchButton();
+                    _page.SelectJobCategory("QA");
+                    _page.FillJobSearchField("Luxoft");
+                    _page.ClickJobSearchButton();
 
                     //Assert.("QA", _driver.FindElement(By.ClassName("b-inner-page-header")).Text);
                     //Assert.Contains("Luxoft", _driver.FindElement(By.CssSelector("a.company")).Text);
@@ -93,11 +92,10 @@ namespace TestDou.Ua
             public void СheckLazyLoading()
             {
                 {
-                    var jobPage = new JobPage(_driver);
-                    jobPage.NavigateTo();
+                    _page.NavigateTo();
 
-                    jobPage.SelectJobCategory("Все категории");
-                    jobPage.ClickMoreVacancyButton();
+                    _page.SelectJobCategory("Все категории");
+                    _page.ClickMoreVacancyButton();
                 }
             }
 
@@ -105,11 +103,10 @@ namespace TestDou.Ua
             public void СheckCityFilterCountVacancy()
             {
                 {
-                    var jobPage = new JobPage(_driver);
-                    jobPage.NavigateTo();
+                    _page.NavigateTo();
 
-                    jobPage.SelectJobCategory("QA");
-                    jobPage.ClickFilterCityLink("Киев");
+                    _page.SelectJobCategory("QA");
+                    _page.ClickFilterCityLink("Киев");
                 }
             }
     }
