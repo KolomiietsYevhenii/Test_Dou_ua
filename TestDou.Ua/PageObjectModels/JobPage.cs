@@ -43,6 +43,11 @@ namespace TestDou.Ua.PageObjectModels
             _driver.FindElement(By.CssSelector("input.btn-search")).Click();
         }
 
+        //public void CountVacancyListElements
+
+        public IWebElement FindHeaderWithVacancyCountAndName =>_driver.FindElement(By.CssSelector("div.b-inner-page-header h1"));
+        
+
         public void ClickMoreVacancyButton()
         {
             _driver.FindElement(By.ClassName("more-btn")).Click();
@@ -59,9 +64,16 @@ namespace TestDou.Ua.PageObjectModels
             lookUpCityLink.Click();
         }
 
+        public void FindVacancyCountInFilterCityLink()
+        {
+            
+        }
+
+
         public void NavigateTo()
         {
             _driver.Navigate().GoToUrl(PageUrl);
+            EnsurePageLoaded();
         }
 
         public void NavigateToTab(IWebElement tab)
