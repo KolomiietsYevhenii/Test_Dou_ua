@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using TestDou.Ua.PageObjectModels;
 using NUnit.Framework;
-using Assert = Xunit.Assert;
+
 
 namespace TestDou.Ua
 {
@@ -20,94 +19,90 @@ namespace TestDou.Ua
             _driver = new ChromeDriver();
             _page = new JobPage(_driver);
         }
+
         [Test]
         public void CheckingSomeElements()
         {
-            {
-                _page.NavigateTo();
+            _page.NavigateTo();
 
-                ReadOnlyCollection<IWebElement> informationsElemnents = _page.HeaderLiElements;
+            //ReadOnlyCollection<IWebElement> informationsElemnents = _page.HeaderLiElements;
 
-                Assert.Equal("Вакансии", informationsElemnents[0].Text);
-                Assert.Equal("Тренды", informationsElemnents[1].Text);
-                Assert.Equal("Компании", informationsElemnents[2].Text);
-                Assert.Equal("Рейтинг", informationsElemnents[3].Text);
-                Assert.Equal("Топ-50", informationsElemnents[4].Text);
-                Assert.Equal("Отзывы", informationsElemnents[5].Text);
-            }
+            Assert.True("Вакансии".Contains("Вак"));
+            Assert.True(_page.HeaderLiElements().Contains("Вакансии"));
+            //Assert.True("Тренды".Contains(_page.HeaderLiElements()));
+            //Assert.True("Компании".Contains(_page.HeaderLiElements()));
+            //Assert.True("Рейтинг".Contains(_page.HeaderLiElements()));
+            //Assert.True("Топ-50".Contains(_page.HeaderLiElements()));
+            //Assert.True("Отзывы".Contains(_page.HeaderLiElements()));
         }
+
         [Test]
         public void OpenDjinniFooterLinkInNewTab()
         {
-            {
-                _page.NavigateTo();
-                _page.NavigateToTab(_page.JobsTabElement);
-                _page.NavigateToTab(_page.TrendsTabElement);
+            _page.NavigateTo();
+            _page.NavigateToTab(_page.JobsTabElement);
+            _page.NavigateToTab(_page.TrendsTabElement);
 
-                _page.ClickSearchFooterLink();
+            _page.ClickSearchFooterLink();
 
-                ReadOnlyCollection<string> allTabs = _driver.WindowHandles;
-                //string jobPageTab = allTabs[0];
-                string searchDjinniTab = allTabs[1];
-                _driver.SwitchTo().Window(searchDjinniTab);
-                Assert.StartsWith("https://djinni.co/", _driver.Url);
-            }
+            _driver.SwitchToLastWindow();
+            Assert.True(_driver.Url.Contains("https://djinni.co/"), "Redirect to djinny failed");
         }
+
         [Test]
-        public void ReloadJobPageOnBack()
+        public void CheckJobSearchField()
         {
-            {
-                var homepage = new HomePage(_driver);
+            _page.NavigateTo();
 
-                _driver.MaximizeWindow();
-                _page.NavigateTo();
-                string initialUsersCount = _page.UsersCount;
+            _page.SelectJobCategory("QA");
+            _page.FillJobSearchField("Luxoft");
+            _page.ClickJobSearchButton();
 
-                homepage.NavigateTo();
-                _driver.Navigate().Back();
-
-                string reloadedUsers = _page.UsersCount;
-                Assert.Equal(initialUsersCount, reloadedUsers);
-            }
+            Assert.True("QA".Contains(_page.FindHeaderWithVacancyCountAndName.Text));
+            Assert.True("Luxoft".Contains(_page.FindHeaderWithVacancyCountAndName.Text));
         }
+
         [Test]
-        public void СheckJobSearchField()
+        public void CheckLoadingVacancy()
         {
-            {
-                _page.NavigateTo();
+            _page.NavigateTo();
+            _page.SelectJobCategory("QA");
+            _page.ClickFilterCityLink("Киев");
 
-                _page.SelectJobCategory("QA");
-                _page.FillJobSearchField("Luxoft");
-                _page.ClickJobSearchButton();
-
-                //Assert.Contains("QA", _driver.FindElement(By.CssSelector("div.b-inner-page-header h1")).Text);
-                Assert.Contains("QA", _page.FindHeaderWithVacancyCountAndName.Text);
-                Assert.Contains("Luxoft", _page.FindHeaderWithVacancyCountAndName.Text);
-            }
+            _page.ClickMoreVacancyButton();
         }
+
         [Test]
-        public void СheckLazyLoading()
+        public void CheckCityFilterCountVacancy()
         {
-            {
-                _page.NavigateTo();
+            _page.NavigateTo();
 
-                _page.SelectJobCategory("Все категории");
+            _page.SelectJobCategory("QA");
+            _page.ClickFilterCityLink("Киев");
 
-                _page.ClickMoreVacancyButton();
-            }
+            var countInFilterCityLink = _page.FindVacancyCountInFilterCityLink();
+            var headerText = _page.GetHeaderVacancyText();
+
+            Assert.True(headerText.Contains(countInFilterCityLink), "Count in filter not equal count in header");
         }
+
         [Test]
-        public void СheckCityFilterCountVacancy()
+        public void CheckCityOfVacancyVSCityOfFilter()
         {
+            _page.NavigateTo();
+            _page.SelectJobCategory("QA");
+            _page.ClickFilterCityLink("Киев");
+
+            var cityInFilterCityLink = _page.FindCityInCityFilterLink();
+            var cityVacancy = _page.FindCityInVacancyList();
+
+            foreach (var x in cityVacancy)
             {
-                _page.NavigateTo();
-
-                _page.SelectJobCategory("QA");
-                _page.ClickFilterCityLink("Киев");
-
-                //Assert.;
+               Assert.True(cityVacancy.Contains(cityInFilterCityLink), "City in filter not equal City in vacancy");
             }
+
         }
+
         public void Dispose()
         {
             _driver.Quit();

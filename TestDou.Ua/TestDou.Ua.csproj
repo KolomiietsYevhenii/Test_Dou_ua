@@ -76,6 +76,7 @@
     <Compile Include="PageObjectModels\HomePage.cs" />
     <Compile Include="PageObjectModels\JobPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestHomePage.cs" />
     <Compile Include="TestsJobPage.cs" />
     <Compile Include="WebDriverExtensions.cs" />
   </ItemGroup>

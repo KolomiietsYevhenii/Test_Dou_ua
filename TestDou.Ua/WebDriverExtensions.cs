@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace TestDou.Ua
 {
@@ -14,5 +15,17 @@ namespace TestDou.Ua
             driver.Manage().Window.Maximize();
         }
 
+        public static void Wait(this IWebDriver driver)
+        {
+            //WebDriverWait wait = new WebDriverWait(driver, new TimeSpan(10));
+            //var element = wait.Until(ExpectedConditions.InvisibilityOfElementLocated())
+                //until(
+                //ExpectedConditions.visibilityOfElementLocated(By.id("someid")));
+        }
+
+        public static void SwitchToLastWindow(this IWebDriver driver)
+        {
+            driver.SwitchTo().Window(driver.WindowHandles.Last());
+        }
     }
 }
