@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using TestDou.Ua.PageObjectModels;
@@ -27,13 +28,12 @@ namespace TestDou.Ua
 
             //ReadOnlyCollection<IWebElement> informationsElemnents = _page.HeaderLiElements;
 
-            Assert.True("Вакансии".Contains("Вак"));
             Assert.True(_page.HeaderLiElements().Contains("Вакансии"));
-            //Assert.True("Тренды".Contains(_page.HeaderLiElements()));
-            //Assert.True("Компании".Contains(_page.HeaderLiElements()));
-            //Assert.True("Рейтинг".Contains(_page.HeaderLiElements()));
-            //Assert.True("Топ-50".Contains(_page.HeaderLiElements()));
-            //Assert.True("Отзывы".Contains(_page.HeaderLiElements()));
+            Assert.True(_page.HeaderLiElements().Contains("Тренды"));
+            Assert.True(_page.HeaderLiElements().Contains("Компании"));
+            Assert.True(_page.HeaderLiElements().Contains("Рейтинг"));
+            Assert.True(_page.HeaderLiElements().Contains("Топ-50"));
+            Assert.True(_page.HeaderLiElements().Contains("Отзывы"));
         }
 
         [Test]
@@ -69,7 +69,11 @@ namespace TestDou.Ua
             _page.SelectJobCategory("QA");
             _page.ClickFilterCityLink("Киев");
 
-            _page.ClickMoreVacancyButton();
+            var totalVacancyCount = _page.FindVacancyCountInFilterCityLink();
+            var vacancyListElementCount = _page.GetTotaVacancyslElementsCount(totalVacancyCount);
+
+            Assert.True(totalVacancyCount == vacancyListElementCount,
+                $"Total count {totalVacancyCount} doesn't match with elements count {vacancyListElementCount}");
         }
 
         [Test]
@@ -89,18 +93,21 @@ namespace TestDou.Ua
         [Test]
         public void CheckCityOfVacancyVSCityOfFilter()
         {
+            var testCity = "Киев";
+
             _page.NavigateTo();
             _page.SelectJobCategory("QA");
-            _page.ClickFilterCityLink("Киев");
+            _page.ClickFilterCityLink(testCity);
 
             var cityInFilterCityLink = _page.FindCityInCityFilterLink();
-            var cityVacancy = _page.FindCityInVacancyList();
+            var cityVacancies = _page.FindCityInVacancyList();
 
-            foreach (var x in cityVacancy)
+            Assert.True(testCity.Equals(cityInFilterCityLink));
+
+            foreach (var cityVacancy in cityVacancies)
             {
-               Assert.True(cityVacancy.Contains(cityInFilterCityLink), "City in filter not equal City in vacancy");
+                Assert.True(cityVacancy.Contains(testCity), $"City in filter not equal City in vacancy ({cityVacancy}).");
             }
-
         }
 
         public void Dispose()

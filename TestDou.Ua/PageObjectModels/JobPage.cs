@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
@@ -46,6 +45,7 @@ namespace TestDou.Ua.PageObjectModels
         }
 
         //TODO move to driver extensions
+
         public IWebElement FindHeaderWithVacancyCountAndName =>
             _driver.FindElement(By.CssSelector("div.b-inner-page-header h1"));
 
@@ -56,22 +56,25 @@ namespace TestDou.Ua.PageObjectModels
             return countElements;
         }
 
-        public void ClickMoreVacancyButton()
+        public string GetTotaVacancyslElementsCount(string totalVacancyCount)
         {
-            var totalVacancyCount = FindVacancyCountInFilterCityLink();
-
+            int i = 0;
             while (CountVacancyListElements() != totalVacancyCount)
             {
-                var test = CountVacancyListElements();
+                i++;
+                //var test = CountVacancyListElements();
 
                 _driver.FindElement(By.CssSelector("div.more-btn a")).Click();
 
-                WebDriverWait wait = new WebDriverWait(_driver, new TimeSpan(10));
-                bool element =
-                    wait.Until(ExpectedConditions.InvisibilityOfElementLocated(By.ClassName("__loading")));
+                _driver.WaitUntilElementDisappear(By.ClassName("__loading"), TimeSpan.FromSeconds(2));
 
-                //wait.Until(_driver => !_driver.FindElement(By.ClassName("__loading")).Displayed);
+                if (i == 1000)
+                {
+                    throw new Exception("Something went wrong with your loop");
+                }
             }
+
+            return CountVacancyListElements();
         }
 
         //TODO move to driver extensions
