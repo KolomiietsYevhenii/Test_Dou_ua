@@ -15,14 +15,6 @@ namespace TestDou.Ua
             driver.Manage().Window.Maximize();
         }
 
-        public static void Wait(this IWebDriver driver)
-        {
-            //WebDriverWait wait = new WebDriverWait(driver, new TimeSpan(10));
-            //var element = wait.Until(ExpectedConditions.InvisibilityOfElementLocated())
-                //until(
-                //ExpectedConditions.visibilityOfElementLocated(By.id("someid")));
-        }
-
         public static void SwitchToLastWindow(this IWebDriver driver)
         {
             driver.SwitchTo().Window(driver.WindowHandles.Last());
@@ -33,5 +25,12 @@ namespace TestDou.Ua
             WebDriverWait wait = new WebDriverWait(driver, timeout);
             bool element = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.InvisibilityOfElementLocated(findBy));
         }
+
+        public static void WaitUntilElementToBeClickable(this IWebDriver driver, By findBy, TimeSpan timeout)
+        {
+            WebDriverWait wait = new WebDriverWait(driver, timeout);
+            IWebElement element = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(findBy));
+        }
+
     }
-}
+    }

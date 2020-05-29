@@ -8,12 +8,12 @@ using NUnit.Framework;
 namespace TestDou.Ua
 {
     [TestFixture]
-    public class TestHomePage : IDisposable
+    public class TestsHomePage : IDisposable
     {
         private readonly IWebDriver _driver;
         private readonly HomePage _homePage;
 
-        public TestHomePage()
+        public TestsHomePage()
 
         {
             _driver = new ChromeDriver();
