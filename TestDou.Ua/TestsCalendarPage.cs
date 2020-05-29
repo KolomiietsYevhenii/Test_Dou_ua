@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using OpenQA.Selenium;
@@ -28,13 +26,18 @@ namespace TestDou.Ua
         public async Task CheckPagination()
         {
             _page.NavigateTo();
-            await _page.WebRequestGet();
+            var httpRequestSender = new HttpRequestSender();
 
-            var carentStatusCode = await _page.WebRequestGet();
-            
-            Assert.AreEqual((HttpStatusCode.OK), carentStatusCode);
+            var eventUrls = _page.ClickOnEveryElementsInPagination();
 
-            //_page.ClickOnEveryElementsInPagination();
+            foreach (var eventUrl in eventUrls)
+            {
+                var response = await httpRequestSender.SendGet(eventUrl);
+
+                Assert.AreEqual((HttpStatusCode.OK), response.StatusCode);
+
+                Thread.Sleep(2000);
+            }
         }
 
         public void Dispose()

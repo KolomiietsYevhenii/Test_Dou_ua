@@ -48,18 +48,8 @@ namespace TestDou.Ua.PageObjectModels
         public List<string> GetEventUrls()
         {
             return _driver.FindElements(By.CssSelector(".b-postcard h2 a"))
-                .Select(x => x.Text)
+                .Select(x => x.GetAttribute("href"))
                 .ToList();
         }
-
-
-        public async Task<HttpStatusCode> WebRequestGet()
-        {
-            var client = new HttpClient();
-
-            var result = await client.GetAsync("https://dou.ua/calendar/");
-            return result.StatusCode;
-        }
-
     }
 }
