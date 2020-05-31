@@ -1,11 +1,9 @@
-﻿using System.Linq;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 
 namespace TestDou.Ua.PageObjectModels
 {
     class HomePage
     {
-        private const string HomeUrl = "https://dou.ua/";
         private readonly IWebDriver _driver;
 
         public HomePage(IWebDriver driver)
@@ -15,7 +13,7 @@ namespace TestDou.Ua.PageObjectModels
 
         public void NavigateTo()
         {
-            _driver.Navigate().GoToUrl(HomeUrl);
+            _driver.Navigate().GoToUrl(ConfigurationAccessor.HomePageUrl);
             _driver.MaximizeWindow();
         }
 
@@ -42,6 +40,35 @@ namespace TestDou.Ua.PageObjectModels
         public void InputPassword(string password)
         {
             _driver.FindElement(By.CssSelector("input.whsOnd.zHQkBf")).SendKeys(password);
+        }
+
+        public void CheckSwitchingByHeaderTabs()
+        {
+            _driver.IsElementPresent(By.CssSelector(".b-index-links a"));
+
+            var secondElement = _driver.FindElement(By.LinkText("ФОРУМ"));
+            secondElement.Click();
+            _driver.IsElementPresent(By.CssSelector("a.text.wrap"));
+            
+
+            var thirdElement = _driver.FindElement(By.LinkText("ЛЕНТА"));
+            thirdElement.Click();
+            _driver.IsElementPresent(By.CssSelector(".page-head h1"));
+            
+
+            var fourthElement = _driver.FindElement(By.LinkText("ЗАРПЛАТЫ"));
+            fourthElement.Click();
+            _driver.IsElementPresent(By.CssSelector(".wrap a"));
+            
+
+            var fifthElement = _driver.FindElement(By.LinkText("РАБОТА"));
+            fifthElement.Click();
+            _driver.IsElementPresent(By.CssSelector(".sub li"));
+            
+
+            var sixthElement = _driver.FindElement(By.LinkText("КАЛЕНДАРЬ"));
+            sixthElement.Click();
+            _driver.IsElementPresent(By.CssSelector(".b-content-menu a"));
         }
     }
 }

@@ -1,17 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using OpenQA.Selenium;
 
 namespace TestDou.Ua.PageObjectModels
 {
     class CalendarPage
     {
-        private const string PageUrl = "https://dou.ua/calendar/";
-        private const string PageTitle = "Календарь ИТ-событий | DOU";
         private readonly IWebDriver _driver;
+
+        private static readonly By PaginationLink = By.CssSelector("div.b-paging .page a");
 
         public CalendarPage(IWebDriver driver)
         {
@@ -20,7 +17,7 @@ namespace TestDou.Ua.PageObjectModels
 
         public void NavigateTo()
         {
-            _driver.Navigate().GoToUrl(PageUrl);
+            _driver.Navigate().GoToUrl(ConfigurationAccessor.CalendarPageUrl);
             _driver.MaximizeWindow();
         }
 
@@ -28,13 +25,13 @@ namespace TestDou.Ua.PageObjectModels
         {
             var eventsUrls = new List<string>();
 
-            var pagesCount = int.Parse(_driver.FindElements(By.CssSelector("div.b-paging .page a")).Last().Text);
+            var pagesCount = int.Parse(_driver.FindElements(PaginationLink).Last().Text);
 
             eventsUrls.AddRange(GetEventUrls());
 
             for (int i = 2; i <= pagesCount; i++)
             {
-                var currentPageLink = _driver.FindElements(By.CssSelector("div.b-paging .page a"))
+                var currentPageLink = _driver.FindElements(PaginationLink)
                     .First(x => x.Text == i.ToString());
 
                 currentPageLink.Click();

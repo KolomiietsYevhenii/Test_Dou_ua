@@ -8,14 +8,15 @@ namespace TestDou.Ua.PageObjectModels
 {
     class JobPage
     {
-        private const string PageUrl = "https://jobs.dou.ua/";
-        private const string PageTitle = "Вакансии | DOU";
         private readonly IWebDriver _driver;
 
         public JobPage(IWebDriver driver)
         {
             _driver = driver;
         }
+
+        public IWebElement JobsTabElement => _driver.FindElements(By.CssSelector(".sub li")).FirstOrDefault();
+        public IWebElement TrendsTabElement => _driver.FindElements(By.CssSelector(".sub li")).FirstOrDefault();
 
         public List<string> HeaderLiElements()
         {
@@ -25,9 +26,6 @@ namespace TestDou.Ua.PageObjectModels
 
             return allElements;
         }
-
-        public IWebElement JobsTabElement => _driver.FindElements(By.CssSelector(".sub li")).FirstOrDefault();
-        public IWebElement TrendsTabElement => _driver.FindElements(By.CssSelector(".sub li")).FirstOrDefault();
 
         public void ClickSearchFooterLink()
         {
@@ -105,7 +103,7 @@ namespace TestDou.Ua.PageObjectModels
 
         public void NavigateTo()
         {
-            _driver.Navigate().GoToUrl(PageUrl);
+            _driver.Navigate().GoToUrl(ConfigurationAccessor.JobPageUrl);
             _driver.MaximizeWindow();
             EnsurePageLoaded();
         }
@@ -117,7 +115,7 @@ namespace TestDou.Ua.PageObjectModels
 
         public void EnsurePageLoaded()
         {
-            bool pageHasLoaded = (_driver.Url == PageUrl) && (_driver.Title == PageTitle);
+            bool pageHasLoaded = (_driver.Url == ConfigurationAccessor.JobPageUrl) && (_driver.Title == ConfigurationAccessor.JobPageTitle);
             if (!pageHasLoaded)
             {
                 throw new Exception(

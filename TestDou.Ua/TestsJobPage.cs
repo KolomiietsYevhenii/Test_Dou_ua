@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using TestDou.Ua.PageObjectModels;
@@ -22,11 +21,9 @@ namespace TestDou.Ua
         }
 
         [Test]
-        public void CheckingSomeElements()
+        public void CheckingSecondLineHeaderElements()
         {
             _page.NavigateTo();
-
-            //ReadOnlyCollection<IWebElement> informationsElemnents = _page.HeaderLiElements;
 
             Assert.True(_page.HeaderLiElements().Contains("Вакансии"));
             Assert.True(_page.HeaderLiElements().Contains("Тренды"));
@@ -58,8 +55,8 @@ namespace TestDou.Ua
             _page.FillJobSearchField("Luxoft");
             _page.ClickJobSearchButton();
 
-            Assert.True("QA".Contains(_page.FindHeaderWithVacancyCountAndName.Text));
-            Assert.True("Luxoft".Contains(_page.FindHeaderWithVacancyCountAndName.Text));
+            Assert.True(_page.FindHeaderWithVacancyCountAndName.Text.Contains("QA"));
+            Assert.True(_page.FindHeaderWithVacancyCountAndName.Text.Contains("Luxoft"));
         }
 
         [Test]

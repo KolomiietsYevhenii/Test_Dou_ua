@@ -41,6 +41,16 @@ namespace TestDou.Ua
 
         }
 
+        [Test]
+        public void CheckingMainHeaderTab()
+        {
+            _homePage.NavigateTo();
+            _driver.MaximizeWindow();
+
+            _homePage.CheckSwitchingByHeaderTabs();
+
+        }
+
         public void Dispose()
         {
             _driver.Quit();

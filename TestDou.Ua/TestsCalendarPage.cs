@@ -16,7 +16,6 @@ namespace TestDou.Ua
         private readonly CalendarPage _page;
 
         public TestsCalendarPage()
-
         {
             _driver = new ChromeDriver();
             _page = new CalendarPage(_driver);
@@ -36,7 +35,7 @@ namespace TestDou.Ua
 
                 Assert.AreEqual((HttpStatusCode.OK), response.StatusCode);
 
-                Thread.Sleep(2000);
+                Thread.Sleep(1000);
             }
         }
 
