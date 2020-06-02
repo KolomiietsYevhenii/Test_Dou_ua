@@ -21,7 +21,7 @@ namespace TestDou.Ua
             _page = new CalendarPage(_driver);
         }
 
-        [Test]
+        //Test]
         public async Task CheckPagination()
         {
             _page.NavigateTo();
@@ -29,13 +29,14 @@ namespace TestDou.Ua
 
             var eventUrls = _page.ClickOnEveryElementsInPagination();
 
-            foreach (var eventUrl in eventUrls)
+            foreach (var eventUrl in eventUrls
+                )
             {
                 var response = await httpRequestSender.SendGet(eventUrl);
 
                 Assert.AreEqual((HttpStatusCode.OK), response.StatusCode);
 
-                Thread.Sleep(1000);
+                Thread.Sleep(2000);
             }
         }
 

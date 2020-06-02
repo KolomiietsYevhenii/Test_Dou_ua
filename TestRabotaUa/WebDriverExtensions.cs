@@ -3,7 +3,8 @@ using System.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
-namespace TestDou.Ua
+
+namespace TestRabotaUa
 {
     public static class WebDriverExtensions
     {
@@ -30,30 +31,27 @@ namespace TestDou.Ua
             return element;
         }
 
-        public static void Wait(this IWebDriver driver)
-        {
-           // driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(3);
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(3000));
-        }
-
         public static void IsElementPresent(this IWebDriver driver, By by)
         {
-            // try
             {
                 driver.FindElement(by);
-                // return true;
             }
-            //  catch (NoSuchElementException)
-            //  {
-            //      return false;
-            //   }
         }
+
+        //public static void ExplicitWait(this IWebDriver driver)
+        //{
+        //    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5000));
+        //    wait.Until(WaitUntilElementToBeClickable.)
+
+        //}
 
         public static void TakeScreenshot(this IWebDriver driver, string filename)
         {
             ITakesScreenshot screenShotDriver = (ITakesScreenshot)driver;
             Screenshot screenshot = screenShotDriver.GetScreenshot();
-            screenshot.SaveAsFile(AppDomain.CurrentDomain.BaseDirectory + $"{filename}.png" + $"{filename}.png", ScreenshotImageFormat.Png);
+
+            screenshot.SaveAsFile(AppDomain.CurrentDomain.BaseDirectory + $"{filename}.png", ScreenshotImageFormat.Png);
         }
     }
 }
+

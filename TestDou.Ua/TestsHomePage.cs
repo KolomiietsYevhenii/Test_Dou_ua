@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using TestDou.Ua.PageObjectModels;
 using NUnit.Framework;
+using System.Threading;
 
 namespace TestDou.Ua
 {
@@ -39,6 +39,8 @@ namespace TestDou.Ua
             _homePage.InputPassword("Password");
             _homePage.ClickNextButton();
 
+            Thread.Sleep(2000);
+            _driver.TakeScreenshot("Login");
         }
 
         [Test]
@@ -48,7 +50,6 @@ namespace TestDou.Ua
             _driver.MaximizeWindow();
 
             _homePage.CheckSwitchingByHeaderTabs();
-
         }
 
         public void Dispose()

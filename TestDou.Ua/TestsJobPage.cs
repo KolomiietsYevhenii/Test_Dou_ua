@@ -3,7 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using TestDou.Ua.PageObjectModels;
 using NUnit.Framework;
-
+using System.Threading;
 
 namespace TestDou.Ua
 {
@@ -25,6 +25,8 @@ namespace TestDou.Ua
         {
             _page.NavigateTo();
 
+            _driver.TakeScreenshot("CheckingSecondLineHeaderElements");
+
             Assert.True(_page.HeaderLiElements().Contains("Вакансии"));
             Assert.True(_page.HeaderLiElements().Contains("Тренды"));
             Assert.True(_page.HeaderLiElements().Contains("Компании"));
@@ -43,6 +45,10 @@ namespace TestDou.Ua
             _page.ClickSearchFooterLink();
 
             _driver.SwitchToLastWindow();
+            Thread.Sleep(1000);
+
+            _driver.TakeScreenshot("OpenDjinniFooterLinkInNewTab");
+
             Assert.True(_driver.Url.Contains("https://djinni.co/"), "Redirect to djinny failed");
         }
 
@@ -53,7 +59,13 @@ namespace TestDou.Ua
 
             _page.SelectJobCategory("QA");
             _page.FillJobSearchField("Luxoft");
+
+            _driver.TakeScreenshot("CheckJobSearchField 1");
+
             _page.ClickJobSearchButton();
+            Thread.Sleep(1000);
+
+            _driver.TakeScreenshot("CheckJobSearchField 2");
 
             Assert.True(_page.FindHeaderWithVacancyCountAndName.Text.Contains("QA"));
             Assert.True(_page.FindHeaderWithVacancyCountAndName.Text.Contains("Luxoft"));
@@ -68,6 +80,9 @@ namespace TestDou.Ua
 
             var totalVacancyCount = _page.FindVacancyCountInFilterCityLink();
             var vacancyListElementCount = _page.GetTotaVacancyslElementsCount(totalVacancyCount);
+
+            Thread.Sleep(2000);
+            _driver.TakeScreenshot("CheckLoadingVacancy");
 
             Assert.True(totalVacancyCount == vacancyListElementCount,
                 $"Total count {totalVacancyCount} doesn't match with elements count {vacancyListElementCount}");
@@ -84,6 +99,9 @@ namespace TestDou.Ua
             var countInFilterCityLink = _page.FindVacancyCountInFilterCityLink();
             var headerText = _page.GetHeaderVacancyText();
 
+            Thread.Sleep(1000);
+            _driver.TakeScreenshot("CheckCityFilterCountVacancy");
+
             Assert.True(headerText.Contains(countInFilterCityLink), "Count in filter not equal count in header");
         }
 
@@ -98,6 +116,9 @@ namespace TestDou.Ua
 
             var cityInFilterCityLink = _page.FindCityInCityFilterLink();
             var cityVacancies = _page.FindCityInVacancyList();
+
+            Thread.Sleep(1000);
+            _driver.TakeScreenshot("CheckCityOfVacancyVSCityOfFilter");
 
             Assert.True(testCity.Equals(cityInFilterCityLink));
 
