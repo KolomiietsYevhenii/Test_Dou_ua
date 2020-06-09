@@ -1,4 +1,6 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
+using System;
 
 namespace TestRabotaUa.PageObjectModels
 {
@@ -41,5 +43,18 @@ namespace TestRabotaUa.PageObjectModels
         {
             _driver.FindElement(By.Id("ctl00_Sidebar_login_hlinkRegister")).Click();
         }
+
+        public void HowerOnFindJobLink()
+        {
+            var findJobLink = _driver.WaitUntilElementIsVisible(By.LinkText("Знайти роботу"), TimeSpan.FromSeconds(3000)); 
+
+            Actions action = new Actions(_driver);
+            action.MoveToElement(findJobLink).Perform();
+        }        
+        
+        public string FindElementFromHiddenMenuList()
+        {
+            return _driver.FindElement(By.LinkText("За рубриками")).Text;
+        }    
     }
 }

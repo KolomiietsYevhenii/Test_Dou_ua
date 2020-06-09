@@ -38,12 +38,13 @@ namespace TestRabotaUa
             }
         }
 
-        //public static void ExplicitWait(this IWebDriver driver)
-        //{
-        //    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5000));
-        //    wait.Until(WaitUntilElementToBeClickable.)
+        public static IWebElement WaitUntilElementIsVisible(this IWebDriver driver, By findBy, TimeSpan timeout)
+        {
+            WebDriverWait wait = new WebDriverWait(driver, timeout);
+            IWebElement element = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(findBy));
+            return element;
 
-        //}
+        }
 
         public static void TakeScreenshot(this IWebDriver driver, string filename)
         {

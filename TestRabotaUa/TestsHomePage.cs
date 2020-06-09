@@ -3,9 +3,6 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using TestRabotaUa.PageObjectModels;
-using AventStack.ExtentReports.Reporter;
-using AventStack.ExtentReports;
-using AventStack.ExtentReports.Gherkin.Model;
 using System.Threading;
 
 namespace TestRabotaUa
@@ -52,6 +49,18 @@ namespace TestRabotaUa
             _driver.TakeScreenshot("LoginPage");
 
             Assert.True(_driver.Url.Contains("profile"));
+        }
+
+        [Test]
+        public void CheckHowerOnFindJobLink()
+        {
+            _homePage.NavigateTo();
+
+            _homePage.HowerOnFindJobLink();
+          
+            var elementFromHiddenMenuList = _homePage.FindElementFromHiddenMenuList();
+
+            Assert.True(elementFromHiddenMenuList.Equals("За рубриками"), "Actual link text of element from hidden list doesn't equals expected");
         }
 
         public void Dispose()

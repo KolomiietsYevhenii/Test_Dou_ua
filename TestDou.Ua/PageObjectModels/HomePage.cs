@@ -1,7 +1,4 @@
-﻿using AventStack.ExtentReports;
-using AventStack.ExtentReports.Gherkin.Model;
-using AventStack.ExtentReports.Reporter;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 
 namespace TestDou.Ua.PageObjectModels
 {
