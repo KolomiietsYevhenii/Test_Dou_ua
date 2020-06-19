@@ -13,8 +13,6 @@ namespace TestRabotaUa
         private readonly IWebDriver _driver;
         private readonly HomePage _homePage;
 
-        public object AventStack { get; private set; }
-
         public TestsHomePage()
 
         {
@@ -61,6 +59,21 @@ namespace TestRabotaUa
             var elementFromHiddenMenuList = _homePage.FindElementFromHiddenMenuList();
 
             Assert.True(elementFromHiddenMenuList.Equals("За рубриками"), "Actual link text of element from hidden list doesn't equals expected");
+        }
+
+        [Test]
+        public void CheckSearchField()
+        {
+            _homePage.NavigateTo();
+            _homePage.InputInSearchField("QA Engineer");
+
+            _homePage.InputCitiy("Київ");
+
+            var allVacancysName = _homePage.FindAllNamesFromVacancysOnPage();
+            var allCitiesName = _homePage.FindAllCitiesFromVacancysOnPage();
+
+            Assert.True(allCitiesName.Contains("Київ"));
+            Assert.True(allVacancysName.Contains("QA Engineer"));    
         }
 
         public void Dispose()

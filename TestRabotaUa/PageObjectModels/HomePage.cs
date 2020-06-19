@@ -1,6 +1,9 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
 namespace TestRabotaUa.PageObjectModels
 {
@@ -46,15 +49,47 @@ namespace TestRabotaUa.PageObjectModels
 
         public void HowerOnFindJobLink()
         {
-            var findJobLink = _driver.WaitUntilElementIsVisible(By.LinkText("Знайти роботу"), TimeSpan.FromSeconds(3000)); 
+            var findJobLink = _driver.WaitUntilElementIsVisible(By.LinkText("Знайти роботу"), TimeSpan.FromSeconds(3000));
 
             Actions action = new Actions(_driver);
             action.MoveToElement(findJobLink).Perform();
-        }        
-        
+        }
+
         public string FindElementFromHiddenMenuList()
         {
             return _driver.FindElement(By.LinkText("За рубриками")).Text;
-        }    
+        }
+
+        public void InputInSearchField(string keywords)
+        {
+            _driver.FindElement(By.CssSelector("input.ui-autocomplete-input")).SendKeys(keywords);
+        }
+
+        public void InputCitiy(string city)
+        {
+            var cityField = _driver.FindElement(By.CssSelector("input#ctl00_content_vacSearch_CityPickerWork_inpCity.ui-autocomplete-input"));
+            cityField.Clear();
+            cityField.SendKeys(city);
+
+            Thread.Sleep(2000);
+
+            _driver.FindElement(By.Id("ctl00_content_vacSearch_lnkSearch")).Click();
+        }
+
+        public List<string> FindAllNamesFromVacancysOnPage()
+        {
+            List<string> vacancyElementsList = _driver.FindElements(By.CssSelector("a.ga_listing"))
+                .Select(x => x.Text)
+                .ToList();
+            return vacancyElementsList;
+        }
+
+        public List<string> FindAllCitiesFromVacancysOnPage()
+        {
+            List<string> citiesElementsList = _driver.FindElements(By.CssSelector("span.location"))
+                .Select(x => x.Text)
+                .ToList();
+            return citiesElementsList;
+        }
     }
 }
