@@ -91,5 +91,24 @@ namespace TestRabotaUa.PageObjectModels
                 .ToList();
             return citiesElementsList;
         }
+
+        public void SelectPublicationPeriodOfVacancys()
+        {
+            var findPeriod = _driver.WaitUntilElementIsVisible(By.ClassName("f-vacancylist-dropdown-wrap"), TimeSpan.FromSeconds(1000));
+
+            Actions action = new Actions(_driver);
+            action.MoveToElement(findPeriod).Perform();
+
+            _driver.FindElement(By.LinkText("24 години")).Click();
+        }
+
+        public List<string> FindPublicationTimeElementsOfVacancy()
+        {
+            List<string> allPublicationTimeElements = _driver.FindElements(By.ClassName("publication-time"))
+                .Select(x => x.Text)
+                .ToList();
+            return allPublicationTimeElements;
+        }
     }
 }
+

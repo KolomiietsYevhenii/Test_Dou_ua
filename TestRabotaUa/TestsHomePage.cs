@@ -34,7 +34,7 @@ namespace TestRabotaUa
             //scenario.CreateNode<Given>("Navigate to application");
 
             //extent.Flush();
-            
+
             _homePage.NavigateTo();
 
             _driver.WaitUntilElementToBeClickable(By.ClassName("f-header-menu-list-link-with-border"), TimeSpan.FromSeconds(3000));
@@ -55,7 +55,7 @@ namespace TestRabotaUa
             _homePage.NavigateTo();
 
             _homePage.HowerOnFindJobLink();
-          
+
             var elementFromHiddenMenuList = _homePage.FindElementFromHiddenMenuList();
 
             Assert.True(elementFromHiddenMenuList.Equals("За рубриками"), "Actual link text of element from hidden list doesn't equals expected");
@@ -73,7 +73,39 @@ namespace TestRabotaUa
             var allCitiesName = _homePage.FindAllCitiesFromVacancysOnPage();
 
             Assert.True(allCitiesName.Contains("Київ"));
-            Assert.True(allVacancysName.Contains("QA Engineer"));    
+            Assert.True(allVacancysName.Contains("QA Engineer"));
+        }
+
+        [Test]
+        public void CheckPeriodOfVacancyElement()
+        {
+            _homePage.NavigateTo();
+            _homePage.InputInSearchField("QA Engineer");
+            _homePage.InputCitiy("Київ");
+
+            _homePage.SelectPublicationPeriodOfVacancys();
+
+            var listOfPublicationTimeElements = _homePage.FindPublicationTimeElementsOfVacancy();
+
+            Thread.Sleep(2000);
+
+            foreach (var element in listOfPublicationTimeElements)
+            {
+                if (element.Contains("хвилин"))
+                {
+                    continue;
+                }
+
+                else if (element.Contains("годин"))
+                {
+                    continue;
+                }
+
+                else
+                {
+                    throw new Exception("Publication time of vacancy more than 24 hours");
+                }
+            }
         }
 
         public void Dispose()
